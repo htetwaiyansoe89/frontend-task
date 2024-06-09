@@ -1,40 +1,69 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
 import React from "react";
-import {Link} from "expo-router";
-import {Labels} from "@/constants/Labels";
-import {Colors} from "@/constants/Colors";
+import EmptyCards from "@/components/EmptyCards";
+import CardDetails from "@/components/CardDetails";
+import {FlatList} from "react-native";
+
+type Card = {
+  cardNumber: string;
+  name: string;
+  expiry: string;
+  type: string;
+};
 
 export default function HomeScreen() {
+
+  const cards = [
+    {
+      cardNumber: '• • • • 1 2 3 4',
+      name: 'John Doe',
+      expiry: '12/23',
+      type: 'mastercard'
+    },
+    {
+      cardNumber: '• • • • 5 6 7 8',
+      name: 'Jane Doe',
+      expiry: '12/24',
+      type: 'visa'
+    },
+    {
+      cardNumber: '• • • • 1 2 3 4',
+      name: 'John Doe',
+      expiry: '12/23',
+      type: 'mastercard'
+    },
+    {
+      cardNumber: '• • • • 5 6 7 8',
+      name: 'Jane Doe',
+      expiry: '12/24',
+      type: 'visa'
+    },
+    {
+      cardNumber: '• • • • 1 2 3 4',
+      name: 'John Doe',
+      expiry: '12/23',
+      type: 'mastercard'
+    },
+    {
+      cardNumber: '• • • • 5 6 7 8',
+      name: 'Jane Doe',
+      expiry: '12/24',
+      type: 'visa'
+    },
+  ];
+
+  if (cards.length === 0) {
+    return (
+      <EmptyCards/>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <Image source={require('@/assets/images/card.png')}/>
-      <Text style={styles.contentStyle}>No Cards Found</Text>
-      <Text style={styles.contentStyle}>
-        We recommend adding a card {"\n"}for easy payment
-      </Text>
-      <Link href="/card" style={styles.button}>
-        {Labels.screenTitles.addCard}
-      </Link>
-    </View>
+    <FlatList
+      data={cards}
+      renderItem={
+        ({item}) => <CardDetails card={item}/>
+      }
+      keyExtractor={(item) => item.cardNumber}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  contentStyle: {
-    fontSize: 18,
-    lineHeight: 25,
-    textAlign: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-    color: '#000',
-  },
-  button: {
-    color: Colors.primary,
-    fontSize: 18,
-  }
-});
