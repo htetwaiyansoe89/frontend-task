@@ -1,6 +1,6 @@
 import React from "react";
-import EmptyCards from "@/components/home-screen/EmptyCards";
-import CardDetails from "@/components/home-screen/CardDetails";
+import EmptyCards from "@/components/HomeScreen/EmptyCards";
+import CardDetails from "@/components/HomeScreen/CardDetails";
 import {FlatList} from "react-native";
 
 type Card = {

@@ -1,46 +1,10 @@
 import React from "react";
-import {Image, StyleSheet, Text, View} from "react-native";
+import {StyleSheet} from "react-native";
+import AddCardInputFields from "@/components/Cards/AddCardInputFields";
 
 export default function CardScreen() {
   return (
-    <View style={styles.container}>
-      {/*<Image source={require('@/assets/images/visa.webp')} style={{*/}
-      {/*  ...styles.cardImage,*/}
-      {/*  ...styles.visa,*/}
-      {/*}}/>*/}
-
-      <Image source={require('@/assets/images/mastercard.png')} style={{
-        ...styles.cardImage,
-        ...styles.mastercard,
-      }}/>
-
-      <View style={styles.textContainer}>
-        <Text style={styles.cardNumber}>• • • •</Text>
-        <Text style={styles.cardNumber}>• • • •</Text>
-        <Text style={styles.cardNumber}>• • • •</Text>
-        <Text style={styles.cardNumber}>1 2 3 4</Text>
-      </View>
-
-      <View style={styles.textContainer}>
-        <Text style={styles.cardLabel}>
-          Name on Card
-        </Text>
-
-        <Text style={styles.cardLabel}>
-          Expires
-        </Text>
-      </View>
-
-      <View style={styles.textContainer}>
-        <Text style={styles.cardText}>
-          John Doe
-        </Text>
-
-        <Text style={styles.cardText}>
-          12/23
-        </Text>
-      </View>
-    </View>
+    <AddCardInputFields/>
   );
 }
 
