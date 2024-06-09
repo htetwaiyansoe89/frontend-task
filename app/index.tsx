@@ -1,37 +1,40 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import React from "react";
 import {Link} from "expo-router";
+import {Labels} from "@/constants/Labels";
+import {Colors} from "@/constants/Colors";
 
 export default function HomeScreen() {
   return (
-    <View>
-      <Text>
-        asdfasdfasdfasd
+    <View style={styles.container}>
+      <Image source={require('@/assets/images/card.png')}/>
+      <Text style={styles.contentStyle}>No Cards Found</Text>
+      <Text style={styles.contentStyle}>
+        We recommend adding a card {"\n"}for easy payment
       </Text>
-      <Link href={'card'}>
-        <Text>
-          Add Card
-        </Text>
+      <Link href="/card" style={styles.button}>
+        {Labels.screenTitles.addCard}
       </Link>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  contentStyle: {
+    fontSize: 18,
+    lineHeight: 25,
+    textAlign: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+    color: '#000',
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+  button: {
+    color: Colors.primary,
+    fontSize: 18,
+  }
 });
