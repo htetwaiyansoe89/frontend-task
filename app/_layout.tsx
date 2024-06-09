@@ -4,6 +4,7 @@ import 'react-native-reanimated';
 import {Labels} from "@/constants/Labels";
 import AddCardButton from "@/components/AddCardButton";
 import {Colors} from "@/constants/Colors";
+import BackToHomeButton from "@/components/BackToHomeButton";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -18,9 +19,16 @@ export default function RootLayout() {
           backgroundColor: Colors.background,
         },
         headerTitleAlign: 'center',
+        headerLeft: () => <BackToHomeButton/>,
         headerRight: () => <AddCardButton/>,
       }}
     >
+      <Stack.Screen name="index" options={
+        {
+          title: Labels.screenTitles.card,
+          headerLeft: () => null,
+        }
+      }/>
       <Stack.Screen name="card" options={
         {
           title: Labels.screenTitles.addCard,
