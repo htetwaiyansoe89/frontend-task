@@ -1,53 +1,59 @@
-import {Image, StyleSheet, Text, View} from "react-native";
+import {Alert, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import React from "react";
+
+async function handlePayment(card: any) {
+  Alert.alert("Payment", "Payment successful!");
+}
 
 export default function CardDetails(card: any) {
 
   const expiryDate = card.card.expiration_month + '/' + card.card.expiration_year.toString().slice(-2);
 
   return (
-    <View style={styles.container}>
-      {card.card.brand === 'Visa' &&
-        <Image source={require('@/assets/images/visa.webp')} style={{
-          ...styles.cardImage,
-          ...styles.visa,
-        }}/>
-      }
+    <TouchableOpacity onPress={() => handlePayment(card)}>
+      <View style={styles.container}>
+        {card.card.brand === 'Visa' &&
+          <Image source={require('@/assets/images/visa.webp')} style={{
+            ...styles.cardImage,
+            ...styles.visa,
+          }}/>
+        }
 
-      {card.card.brand === 'MasterCard' &&
-        <Image source={require('@/assets/images/mastercard.png')} style={{
-          ...styles.cardImage,
-          ...styles.mastercard,
-        }}/>
-      }
+        {card.card.brand === 'MasterCard' &&
+          <Image source={require('@/assets/images/mastercard.png')} style={{
+            ...styles.cardImage,
+            ...styles.mastercard,
+          }}/>
+        }
 
-      <View style={styles.textContainer}>
-        <Text style={styles.cardNumber}>• • • •</Text>
-        <Text style={styles.cardNumber}>• • • •</Text>
-        <Text style={styles.cardNumber}>• • • •</Text>
-        <Text style={styles.cardNumber}>{card.card.last_digits}</Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.cardNumber}>• • • •</Text>
+          <Text style={styles.cardNumber}>• • • •</Text>
+          <Text style={styles.cardNumber}>• • • •</Text>
+          <Text style={styles.cardNumber}>{card.card.last_digits}</Text>
+        </View>
+
+        <View style={styles.textContainer}>
+          <Text style={styles.cardLabel}>
+            Name on Card
+          </Text>
+
+          <Text style={styles.cardLabel}>
+            Expires
+          </Text>
+        </View>
+
+        <View style={styles.textContainer}>
+          <Text style={styles.cardText}>
+            {card.card.name}
+          </Text>
+
+          <Text style={styles.cardText}>
+            {expiryDate}
+          </Text>
+        </View>
       </View>
-
-      <View style={styles.textContainer}>
-        <Text style={styles.cardLabel}>
-          Name on Card
-        </Text>
-
-        <Text style={styles.cardLabel}>
-          Expires
-        </Text>
-      </View>
-
-      <View style={styles.textContainer}>
-        <Text style={styles.cardText}>
-          {card.card.name}
-        </Text>
-
-        <Text style={styles.cardText}>
-          {expiryDate}
-        </Text>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
