@@ -4,15 +4,9 @@ import {useState} from "react";
 import {Controller, useForm} from "react-hook-form";
 import cardValidator from "card-validator";
 import {creditCardNumberFormatter, expirationDateFormatter} from "@/utils/formatters";
-import OmiseStore from "@/store/omise-store";
 import {router} from "expo-router";
-
-type Inputs = {
-  cardNumber: string;
-  expiryDate: string;
-  cvv: string;
-  holderName: string;
-}
+import {Labels} from "@/constants/Labels";
+import addCard from "@/api/omise-api";
 
 export default function AddCardInputFields() {
 
@@ -28,33 +22,10 @@ export default function AddCardInputFields() {
   } = useForm<Inputs>();
 
   const onSubmit = async (data: any) => {
-    const Buffer = require("buffer").Buffer;
-    let encodedAuth = new Buffer("pkey_test_5wvisbxphp1zapg8ie6").toString("base64");
-
-    const bodyRaw = JSON.stringify({
-      "card": {
-        "name": data.holderName,
-        "number": data.cardNumber.replace(/\s/g, ''),
-        "expiration_month": data.expiryDate.split('/')[0],
-        "expiration_year": data.expiryDate.split('/')[1],
-        "security_code": data.cvv,
-      }
-    });
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${encodedAuth}`
-      },
-      body: bodyRaw
-    };
-
-    const tokenResponse = await fetch('https://vault.omise.co/tokens', requestOptions)
-    const token = await tokenResponse.json();
-    OmiseStore.addToken(token);
+    const token = await addCard(data);
 
     if (token) {
-      Alert.alert('Success', 'Card added successfully');
+      Alert.alert('Success', Labels.content.cardAdded);
       router.push('/');
     }
   }
@@ -67,12 +38,12 @@ export default function AddCardInputFields() {
           name={'cardNumber'}
           control={control}
           rules={{
-            required: 'Card number is required.',
+            required: Labels.validation.cardNumber,
             validate: {
               isValid: (value: string) => {
                 return (
                   (cardValidator.number(value).isValid && value.length === 19) ||
-                  'This card number is invalid.'
+                  Labels.validation.cardNumberInvalid
                 )
               },
             },
@@ -83,7 +54,7 @@ export default function AddCardInputFields() {
                 ...styles.input,
                 ...(errors.cardNumber ? styles.inputError : {})
               }}
-              placeholder="0000 0000 0000 0000"
+              placeholder={Labels.formPlaceholders.cardNumber}
               keyboardType="number-pad"
               maxLength={19}
               onBlur={onBlur}
@@ -99,12 +70,12 @@ export default function AddCardInputFields() {
           name={'holderName'}
           control={control}
           rules={{
-            required: 'Holder name is required.',
+            required: Labels.validation.holderName,
             validate: {
               isValid: (value: string) => {
                 return (
                   cardValidator.cardholderName(value).isValid ||
-                  'Cardholder name is invalid.'
+                  Labels.validation.holderNameInvalid
                 )
               },
             },
@@ -115,7 +86,7 @@ export default function AddCardInputFields() {
                 ...styles.input,
                 ...(errors.holderName ? styles.inputError : {})
               }}
-              placeholder="John Doe"
+              placeholder={Labels.formPlaceholders.holderName}
               value={value}
               maxLength={255}
               onChangeText={onChange}
@@ -134,12 +105,12 @@ export default function AddCardInputFields() {
               name={'expiryDate'}
               control={control}
               rules={{
-                required: 'Expiry date is required.',
+                required: Labels.validation.expiryDate,
                 validate: {
                   isValid: (value: string) => {
                     return (
                       cardValidator.expirationDate(value).isValid ||
-                      'Expiry date is invalid.'
+                      Labels.validation.expiryDateInvalid
                     )
                   },
                 },
@@ -151,7 +122,7 @@ export default function AddCardInputFields() {
                     ...(errors.expiryDate ? styles.inputError : {})
                   }}
                   keyboardType="number-pad"
-                  placeholder="MM/YY"
+                  placeholder={Labels.formPlaceholders.expiryDate}
                   maxLength={5}
                   onBlur={onBlur}
                   onChangeText={(text) => onChange(expirationDateFormatter(text))}
@@ -170,12 +141,12 @@ export default function AddCardInputFields() {
               name={'cvv'}
               control={control}
               rules={{
-                required: 'CVV is required.',
+                required: Labels.validation.cvv,
                 validate: {
                   isValid: (value: string) => {
                     return (
                       cardValidator.cvv(value).isValid ||
-                      'CVV is invalid.'
+                      Labels.validation.cvvInvalid
                     )
                   },
                 },

@@ -1,14 +1,16 @@
 import {Alert, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import React from "react";
+import {Labels} from "@/constants/Labels";
 
 async function handlePayment(card: any) {
-  Alert.alert("Payment", "Payment successful!");
+  Alert.alert("Payment", Labels.content.paymentSuccess);
+}
+
+function getExpiryDate(card: any) {
+  return card.card.expiration_month + '/' + card.card.expiration_year.toString().slice(-2);
 }
 
 export default function CardDetails(card: any) {
-
-  const expiryDate = card.card.expiration_month + '/' + card.card.expiration_year.toString().slice(-2);
-
   return (
     <TouchableOpacity onPress={() => handlePayment(card)}>
       <View style={styles.container}>
@@ -27,9 +29,9 @@ export default function CardDetails(card: any) {
         }
 
         <View style={styles.textContainer}>
-          <Text style={styles.cardNumber}>• • • •</Text>
-          <Text style={styles.cardNumber}>• • • •</Text>
-          <Text style={styles.cardNumber}>• • • •</Text>
+          <Text style={styles.cardNumber}>{Labels.formPlaceholders.dots}</Text>
+          <Text style={styles.cardNumber}>{Labels.formPlaceholders.dots}</Text>
+          <Text style={styles.cardNumber}>{Labels.formPlaceholders.dots}</Text>
           <Text style={styles.cardNumber}>{card.card.last_digits}</Text>
         </View>
 
@@ -49,7 +51,7 @@ export default function CardDetails(card: any) {
           </Text>
 
           <Text style={styles.cardText}>
-            {expiryDate}
+            {getExpiryDate(card)}
           </Text>
         </View>
       </View>
