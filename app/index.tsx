@@ -2,6 +2,7 @@ import React from "react";
 import EmptyCards from "@/components/HomeScreen/EmptyCards";
 import CardDetails from "@/components/HomeScreen/CardDetails";
 import {FlatList} from "react-native";
+import OmiseStore from "@/store/omise-store";
 
 type Card = {
   cardNumber: string;
@@ -12,44 +13,7 @@ type Card = {
 
 export default function HomeScreen() {
 
-  const cards = [
-    {
-      cardNumber: '• • • • 1 2 3 4',
-      name: 'John Doe',
-      expiry: '12/23',
-      type: 'mastercard'
-    },
-    {
-      cardNumber: '• • • • 5 6 7 8',
-      name: 'Jane Doe',
-      expiry: '12/24',
-      type: 'visa'
-    },
-    {
-      cardNumber: '• • • • 1 2 3 4',
-      name: 'John Doe',
-      expiry: '12/23',
-      type: 'mastercard'
-    },
-    {
-      cardNumber: '• • • • 5 6 7 8',
-      name: 'Jane Doe',
-      expiry: '12/24',
-      type: 'visa'
-    },
-    {
-      cardNumber: '• • • • 1 2 3 4',
-      name: 'John Doe',
-      expiry: '12/23',
-      type: 'mastercard'
-    },
-    {
-      cardNumber: '• • • • 5 6 7 8',
-      name: 'Jane Doe',
-      expiry: '12/24',
-      type: 'visa'
-    },
-  ];
+  const cards = OmiseStore.tokens;
 
   if (cards.length === 0) {
     return (
@@ -61,9 +25,9 @@ export default function HomeScreen() {
     <FlatList
       data={cards}
       renderItem={
-        ({item}) => <CardDetails card={item}/>
+        ({item}) => <CardDetails card={item.card}/>
       }
-      keyExtractor={(item) => item.cardNumber}
+      keyExtractor={(item) => item.id}
     />
   );
 }

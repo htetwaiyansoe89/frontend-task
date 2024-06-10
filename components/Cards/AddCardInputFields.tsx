@@ -1,9 +1,11 @@
-import {Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Alert, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import {Colors} from "@/constants/Colors";
 import {useState} from "react";
 import {Controller, useForm} from "react-hook-form";
 import cardValidator from "card-validator";
 import {creditCardNumberFormatter, expirationDateFormatter} from "@/utils/formatters";
+import OmiseStore from "@/store/omise-store";
+import {router} from "expo-router";
 
 type Inputs = {
   cardNumber: string;
@@ -11,6 +13,7 @@ type Inputs = {
   cvv: string;
   holderName: string;
 }
+
 export default function AddCardInputFields() {
 
   const [cardNumber, setCardNumber] = useState('');
@@ -24,7 +27,37 @@ export default function AddCardInputFields() {
     formState: {errors},
   } = useForm<Inputs>();
 
-  const onSubmit = (data: any) => console.log(data)
+  const onSubmit = async (data: any) => {
+    const Buffer = require("buffer").Buffer;
+    let encodedAuth = new Buffer("pkey_test_5wvisbxphp1zapg8ie6").toString("base64");
+
+    const bodyRaw = JSON.stringify({
+      "card": {
+        "name": data.holderName,
+        "number": data.cardNumber.replace(/\s/g, ''),
+        "expiration_month": data.expiryDate.split('/')[0],
+        "expiration_year": data.expiryDate.split('/')[1],
+        "security_code": data.cvv,
+      }
+    });
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${encodedAuth}`
+      },
+      body: bodyRaw
+    };
+
+    const tokenResponse = await fetch('https://vault.omise.co/tokens', requestOptions)
+    const token = await tokenResponse.json();
+    OmiseStore.addToken(token);
+
+    if (token) {
+      Alert.alert('Success', 'Card added successfully');
+      router.push('/');
+    }
+  }
 
   return (
     <View style={styles.container}>

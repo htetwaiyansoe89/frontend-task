@@ -2,24 +2,30 @@ import {Image, StyleSheet, Text, View} from "react-native";
 import React from "react";
 
 export default function CardDetails(card: any) {
-  console.log(card)
+
+  const expiryDate = card.card.expiration_month + '/' + card.card.expiration_year.toString().slice(-2);
+
   return (
     <View style={styles.container}>
-      {/*<Image source={require('@/assets/images/visa.webp')} style={{*/}
-      {/*  ...styles.cardImage,*/}
-      {/*  ...styles.visa,*/}
-      {/*}}/>*/}
+      {card.card.brand === 'Visa' &&
+        <Image source={require('@/assets/images/visa.webp')} style={{
+          ...styles.cardImage,
+          ...styles.visa,
+        }}/>
+      }
 
-      <Image source={require('@/assets/images/mastercard.png')} style={{
-        ...styles.cardImage,
-        ...styles.mastercard,
-      }}/>
+      {card.card.brand === 'MasterCard' &&
+        <Image source={require('@/assets/images/mastercard.png')} style={{
+          ...styles.cardImage,
+          ...styles.mastercard,
+        }}/>
+      }
 
       <View style={styles.textContainer}>
         <Text style={styles.cardNumber}>• • • •</Text>
         <Text style={styles.cardNumber}>• • • •</Text>
         <Text style={styles.cardNumber}>• • • •</Text>
-        <Text style={styles.cardNumber}>1 2 3 4</Text>
+        <Text style={styles.cardNumber}>{card.card.last_digits}</Text>
       </View>
 
       <View style={styles.textContainer}>
@@ -34,11 +40,11 @@ export default function CardDetails(card: any) {
 
       <View style={styles.textContainer}>
         <Text style={styles.cardText}>
-          John Doe
+          {card.card.name}
         </Text>
 
         <Text style={styles.cardText}>
-          12/23
+          {expiryDate}
         </Text>
       </View>
     </View>
