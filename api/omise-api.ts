@@ -1,7 +1,7 @@
 import getEncodedAuth from "@/utils/encoder";
 import OmiseStore from "@/store/omise-store";
 
-export default async function addCard(data: any) {
+export default async function addCard(data: any): Promise<{token: any}> {
   let encodedAuth = getEncodedAuth();
 
   const bodyRaw = JSON.stringify({
@@ -26,5 +26,5 @@ export default async function addCard(data: any) {
   const token = await tokenResponse.json();
   OmiseStore.addToken(token);
 
-  return token;
+  return {token};
 }
